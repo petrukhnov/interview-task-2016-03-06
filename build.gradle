@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+// tag::repositories[]
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+// end::repositories[]
+
+group 'konstantin.petrukhnov'
+version '1.0-SNAPSHOT'
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+mainClassName = group+'.'+rootProject.name+'.'+'AppConfig'
+
+dependencies {
+
+    compile 'ch.qos.logback:logback-classic:1.1.7'
+    compile 'org.slf4j:slf4j-api:1.7.24'
+    compile 'org.projectlombok:lombok:1.16.14'
+    compile 'io.advantageous.qbit:qbit-admin:1.10.0.RELEASE'
+    compile 'io.advantageous.qbit:qbit-vertx:1.10.0.RELEASE'
+    compile 'io.vertx:vertx-core:3.2.1'
+    testCompile 'junit:junit:4.12'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.4.1'
+}
