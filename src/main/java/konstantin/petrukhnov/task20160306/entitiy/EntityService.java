@@ -5,7 +5,6 @@ import io.advantageous.qbit.annotation.RequestMapping;
 import io.advantageous.qbit.annotation.RequestMethod;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -15,24 +14,29 @@ import java.util.*;
 @RequestMapping("/entity")
 public class EntityService {
 
+    //kind of persistence, in reality could be async calls to from dao layer to DB
     //root for entities
     private List<Entity> entityList = new ArrayList<>();
     // poorman lookup service
     private HashMap<String, Entity> entityMap = new HashMap<>();
 
 
+    /**
+     * Return list of all entities, for big number of entities, i would add default limit and pagination/search
+     * @return
+     */
     @RequestMapping("/getList")
     public List<Entity> getList() {
         return entityList;
     }
 
     /**
-     * Adding entity to root.
+     * Adding entity to root. qbit doesn't support optional params, to merge this and 'add' methods
      * @param entity
      */
-    @RequestMapping(value = "/addToRoot", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public void addToRoot(final EntityItem entity) {
-        log.error("addRoot: {}", entity.getID());
+        log.debug("addRoot: {}", entity.getID());
         entityList.add(entity);
         entityMap.put(entity.getID(), entity);
     }
@@ -44,7 +48,7 @@ public class EntityService {
      */
     @RequestMapping(value = {"/add/{id}"}, method = RequestMethod.POST)
     public void add(@PathVariable("id") String id, final EntityItem entity) {
-        log.error("add: {}, {}", id, entity.getID());
+        log.debug("add: {}, {}", id, entity.getID());
         //add to other entity
         Set<Entity> subEntities = entityMap.get(id).getSubEntities();
         //create subentities if not exist yet
@@ -68,13 +72,9 @@ public class EntityService {
         return entityMap.get(id);
     }
 
-    //just test to verify that server is working
-    @RequestMapping("/test")
-    public String qbittest() {
-        return "234";
-    }
-
-    //can't find how to make PostConstruct working
+    /**
+     * Load initial data
+     */
     public  EntityService() {
         Entity ent1 = EntityItem.builder().ID("ent1").build();
         entityList.add(ent1);
