@@ -41,6 +41,7 @@ dependencies {
     compile 'io.advantageous.qbit:qbit-vertx:1.10.0.RELEASE'
     compile 'io.vertx:vertx-core:3.2.1'
     testCompile 'junit:junit:4.12'
+    testCompile 'com.google.guava:guava:21.0'
 }
 
 task wrapper(type: Wrapper) {
